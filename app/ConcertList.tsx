@@ -30,6 +30,29 @@ export default function ConcertList({ concerts }: { concerts: Concert[] }) {
         🎤 Live Concerts
       </h1>
 
+      <div style={{ textAlign: "center", marginBottom: "25px" }}>
+        <a href="/login">
+          <button style={topButtonStyle}>Login</button>
+        </a>
+
+        <a href="/register">
+          <button style={topButtonStyle}>Register</button>
+        </a>
+
+        <button
+          style={topButtonStyle}
+          onClick={async () => {
+            await fetch("/api/logout", {
+              method: "POST",
+            });
+
+            window.location.reload();
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
       <div
         style={{
           display: "grid",
@@ -132,3 +155,14 @@ export default function ConcertList({ concerts }: { concerts: Concert[] }) {
     </main>
   );
 }
+
+const topButtonStyle = {
+  margin: "0 8px",
+  padding: "10px 20px",
+  borderRadius: "999px",
+  border: "none",
+  background: "linear-gradient(45deg, #ff4d8d, #ff7ab6)",
+  color: "white",
+  fontWeight: "bold",
+  cursor: "pointer",
+};

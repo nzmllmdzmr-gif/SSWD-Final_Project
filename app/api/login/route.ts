@@ -20,10 +20,15 @@ export async function POST(req: Request) {
 
     const user = rows[0];
 
-    return NextResponse.json({
-      message: "Login successful",
-      role: user.role,
-    });
+    const response = NextResponse.json({
+  message: "Login successful",
+  role: user.role,
+});
+
+response.cookies.set("userRole", user.role);
+response.cookies.set("userName", user.name);
+
+return response;
 
   } catch (error) {
     console.log(error);
