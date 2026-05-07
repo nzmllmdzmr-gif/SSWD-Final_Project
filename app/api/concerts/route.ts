@@ -4,8 +4,16 @@ export async function GET() {
   try {
     const [rows] = await db.query("SELECT * FROM concerts");
     return Response.json(rows);
-  } catch {
-    return Response.json({ message: "Failed to fetch concerts" }, { status: 500 });
+  } catch (error: any) {
+    console.log("GET concerts error:", error);
+
+    return Response.json(
+      {
+        message: "Failed to fetch concerts",
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -28,8 +36,16 @@ export async function POST(req: Request) {
     );
 
     return Response.json({ message: "Concert added successfully!" });
-  } catch {
-    return Response.json({ message: "Failed to add concert" }, { status: 500 });
+  } catch (error: any) {
+    console.log("POST concerts error:", error);
+
+    return Response.json(
+      {
+        message: "Failed to add concert",
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -53,8 +69,16 @@ export async function PUT(req: Request) {
     );
 
     return Response.json({ message: "Concert updated successfully!" });
-  } catch {
-    return Response.json({ message: "Failed to update concert" }, { status: 500 });
+  } catch (error: any) {
+    console.log("PUT concerts error:", error);
+
+    return Response.json(
+      {
+        message: "Failed to update concert",
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -65,7 +89,15 @@ export async function DELETE(req: Request) {
     await db.query("DELETE FROM concerts WHERE id = ?", [body.id]);
 
     return Response.json({ message: "Concert deleted successfully!" });
-  } catch {
-    return Response.json({ message: "Failed to delete concert" }, { status: 500 });
+  } catch (error: any) {
+    console.log("DELETE concerts error:", error);
+
+    return Response.json(
+      {
+        message: "Failed to delete concert",
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

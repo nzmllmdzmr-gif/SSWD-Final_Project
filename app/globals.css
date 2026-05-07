@@ -24,3 +24,39 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.page {
+  background: #000;
+  min-height: 100vh;
+  padding: 20px;
+  color: white;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.primary-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(45deg, #ff4d8d, #ff7ab6);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+}
