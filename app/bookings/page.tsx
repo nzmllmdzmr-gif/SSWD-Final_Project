@@ -26,7 +26,18 @@ export default async function BookingsPage() {
   );
 
   if (users.length === 0) {
-    return <h1>User not found</h1>;
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#000",
+          color: "white",
+          padding: "40px",
+        }}
+      >
+        <h1>User not found</h1>
+      </main>
+    );
   }
 
   const userId = users[0].id;
@@ -39,12 +50,14 @@ export default async function BookingsPage() {
       concerts.venue,
       concerts.city,
       concerts.poster_url,
+      bookings.ticket_type,
       bookings.quantity,
+      bookings.unit_price,
       bookings.total_price,
       bookings.booking_date
     FROM bookings
     JOIN concerts
-    ON bookings.concert_id = concerts.id
+      ON bookings.concert_id = concerts.id
     WHERE bookings.user_id = ?
     ORDER BY bookings.booking_date DESC
     `,
@@ -93,14 +106,16 @@ export default async function BookingsPage() {
             <div style={{ padding: "15px" }}>
               <h2>{item.artist}</h2>
 
-              <p>
+              <p style={{ color: "#aaa" }}>
                 {item.venue}, {item.city}
               </p>
 
+              <p>Ticket Type: {item.ticket_type}</p>
               <p>Quantity: {item.quantity}</p>
+              <p>Unit Price: €{item.unit_price}</p>
 
               <p style={{ color: "#ff4d8d", fontWeight: "bold" }}>
-                €{item.total_price}
+                Total: €{item.total_price}
               </p>
 
               <p style={{ fontSize: "12px", color: "#aaa" }}>

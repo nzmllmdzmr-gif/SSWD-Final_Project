@@ -33,6 +33,10 @@ export default function RegisterPage() {
     const data = await res.json();
 
     setMessage(data.message);
+
+    if (data.success) {
+      window.location.href = "/";
+    }
   }
 
   return (
@@ -41,35 +45,13 @@ export default function RegisterPage() {
 
       <div className="card">
         <form onSubmit={handleSubmit}>
-          <input
-            className="form-input"
-            type="text"
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-          />
+          <input className="form-input" type="text" name="name" placeholder="Name" onChange={handleChange} />
 
-          <input
-            className="form-input"
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-          />
+          <input className="form-input" type="email" name="email" placeholder="Email" onChange={handleChange} />
 
-          <input
-            className="form-input"
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-          />
+          <input className="form-input" type="password" name="password" placeholder="Password" onChange={handleChange} />
 
-          <select
-            className="form-input"
-            name="role"
-            onChange={handleChange}
-          >
+          <select className="form-input" name="role" onChange={handleChange}>
             <option value="attendee">Attendee</option>
             <option value="organiser">Organiser</option>
             <option value="admin">Admin</option>
@@ -80,13 +62,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <p
-          style={{
-            marginTop: "15px",
-            color: "#ff4d8d",
-            fontWeight: "bold",
-          }}
-        >
+        <p style={{ marginTop: "15px", color: "#ff4d8d", fontWeight: "bold" }}>
           {message}
         </p>
       </div>

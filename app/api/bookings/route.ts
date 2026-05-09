@@ -29,10 +29,34 @@ export async function POST(req: Request) {
 
     const userId = users[0].id;
     const concertId = Number(body.concert_id);
-    const quantity = 1;
+    const quantity = Number(body.quantity);
+    const ticketType = body.ticket_type;
+
+    const ticketPrices: any = {
+      VIP1: 200,
+      VIP2: 170,
+      VIP3: 140,
+      VIP4: 110,
+      VIP5: 80,
+      VIP6: 50,
+    };
+
+    if (!ticketType || !ticketPrices[ticketType]) {
+      return Response.json(
+        { message: "Please select a valid ticket type" },
+        { status: 400 }
+      );
+    }
+
+    if (!quantity || quantity <= 0) {
+      return Response.json(
+        { message: "Please select ticket quantity" },
+        { status: 400 }
+      );
+    }
 
     const [concerts]: any = await db.query(
-      "SELECT price, tickets_available FROM concerts WHERE id = ?",
+      "SELECT tickets_available FROM concerts WHERE id = ?",
       [concertId]
     );
 
@@ -43,26 +67,29 @@ export async function POST(req: Request) {
       );
     }
 
-    if (concerts[0].tickets_available <= 0) {
+    if (concerts[0].tickets_available < quantity) {
       return Response.json(
-        { message: "No tickets available" },
+        { message: "Not enough tickets available" },
         { status: 400 }
       );
     }
 
-    const totalPrice = Number(concerts[0].price);
+    const unitPrice = ticketPrices[ticketType];
+    const totalPrice = unitPrice * quantity;
 
     await db.query(
-      "INSERT INTO bookings (user_id, concert_id, quantity, total_price) VALUES (?, ?, ?, ?)",
-      [userId, concertId, quantity, totalPrice]
+      "INSERT INTO bookings (user_id, concert_id, ticket_type, quantity, unit_price, total_price) VALUES (?, ?, ?, ?, ?, ?)",
+      [userId, concertId, ticketType, quantity, unitPrice, totalPrice]
     );
 
     await db.query(
-      "UPDATE concerts SET tickets_available = tickets_available - 1 WHERE id = ?",
-      [concertId]
+      "UPDATE concerts SET tickets_available = tickets_available - ? WHERE id = ?",
+      [quantity, concertId]
     );
 
-    return Response.json({ message: "Booking successful!" });
+    return Response.json({
+      message: "Booking successful!"
+    });
   } catch (error) {
     console.error("BOOKING ERROR:", error);
 
