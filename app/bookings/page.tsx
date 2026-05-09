@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { cookies } from "next/headers";
+import CancelBookingButton from "./CancelBookingButton";
 
 export default async function BookingsPage() {
   const cookieStore = await cookies();
@@ -77,54 +78,62 @@ export default async function BookingsPage() {
         🎟 My Bookings
       </h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-          gap: "20px",
-        }}
-      >
-        {bookings.map((item: any) => (
-          <div
-            key={item.id}
-            style={{
-              background: "#111",
-              borderRadius: "16px",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src={item.poster_url}
-              alt={item.artist}
+      {bookings.length === 0 ? (
+        <p style={{ textAlign: "center", color: "#aaa" }}>
+          No bookings yet.
+        </p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: "20px",
+          }}
+        >
+          {bookings.map((item: any) => (
+            <div
+              key={item.id}
               style={{
-                width: "100%",
-                height: "200px",
-                objectFit: "cover",
+                background: "#111",
+                borderRadius: "16px",
+                overflow: "hidden",
               }}
-            />
+            >
+              <img
+                src={item.poster_url}
+                alt={item.artist}
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                }}
+              />
 
-            <div style={{ padding: "15px" }}>
-              <h2>{item.artist}</h2>
+              <div style={{ padding: "15px" }}>
+                <h2>{item.artist}</h2>
 
-              <p style={{ color: "#aaa" }}>
-                {item.venue}, {item.city}
-              </p>
+                <p style={{ color: "#aaa" }}>
+                  {item.venue}, {item.city}
+                </p>
 
-              <p>Ticket Type: {item.ticket_type}</p>
-              <p>Quantity: {item.quantity}</p>
-              <p>Unit Price: €{item.unit_price}</p>
+                <p>Ticket Type: {item.ticket_type}</p>
+                <p>Quantity: {item.quantity}</p>
+                <p>Unit Price: €{item.unit_price}</p>
 
-              <p style={{ color: "#ff4d8d", fontWeight: "bold" }}>
-                Total: €{item.total_price}
-              </p>
+                <p style={{ color: "#ff4d8d", fontWeight: "bold" }}>
+                  Total: €{item.total_price}
+                </p>
 
-              <p style={{ fontSize: "12px", color: "#aaa" }}>
-                {String(item.booking_date)}
-              </p>
+                <p style={{ fontSize: "12px", color: "#aaa" }}>
+                  {String(item.booking_date)}
+                </p>
+
+                <CancelBookingButton bookingId={item.id} />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </main>
   );
 }

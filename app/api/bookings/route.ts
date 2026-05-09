@@ -88,13 +88,55 @@ export async function POST(req: Request) {
     );
 
     return Response.json({
-      message: "Booking successful!"
+      message: "Booking successful!",
     });
   } catch (error) {
     console.error("BOOKING ERROR:", error);
 
     return Response.json(
       { message: "Booking failed" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const body = await req.json();
+    const bookingId = Number(body.booking_id);
+
+    const [bookings]: any = await db.query(
+      "SELECT concert_id, quantity FROM bookings WHERE id = ?",
+      [bookingId]
+    );
+
+    if (bookings.length === 0) {
+      return Response.json(
+        { message: "Booking not found" },
+        { status: 404 }
+      );
+    }
+
+    const booking = bookings[0];
+
+    await db.query(
+      "DELETE FROM bookings WHERE id = ?",
+      [bookingId]
+    );
+
+    await db.query(
+      "UPDATE concerts SET tickets_available = tickets_available + ? WHERE id = ?",
+      [booking.quantity, booking.concert_id]
+    );
+
+    return Response.json({
+      message: "Booking cancelled successfully",
+    });
+  } catch (error) {
+    console.error("CANCEL BOOKING ERROR:", error);
+
+    return Response.json(
+      { message: "Cancel booking failed" },
       { status: 500 }
     );
   }
