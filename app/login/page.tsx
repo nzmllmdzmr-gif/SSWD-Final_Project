@@ -32,10 +32,13 @@ export default function LoginPage() {
 
     setMessage(data.message);
 
-    if (data.role === "admin") {
-      window.location.href = "/admin";
-    } else {
-      window.location.href = "/";
+    // Only redirect when login is successful
+    if (res.ok && data.message === "Login successful") {
+      if (data.role === "admin") {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = "/";
+      }
     }
   }
 
@@ -75,6 +78,12 @@ export default function LoginPage() {
         >
           {message}
         </p>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: "30px" }}>
+        <a href="/">
+          <button className="primary-btn">🏠 Home</button>
+        </a>
       </div>
     </main>
   );
